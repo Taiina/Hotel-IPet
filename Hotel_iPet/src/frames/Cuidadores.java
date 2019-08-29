@@ -1,41 +1,42 @@
 package frames;
 
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
-
-import conexao.Conexao;
-
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.MaskFormatter;
+
+import DAO.HotelDAO;
+import conexao.Conexao;
 
 public class Cuidadores extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtTeste;
+	private JTextField txtDs;
 	private JButton btnVai;
 	private JButton btnVolta;
 	private JTextField txtDigiteSeuNome;
 	private MaskFormatter mascaras;
 	private JFormattedTextField data;
 	private JFormattedTextField data2;
-	private JTextField txtNMandDS;
+	private JTextField txtNome;
+	int one = -1;
 
 	/**
 	 * Launch the application.
@@ -99,17 +100,17 @@ public class Cuidadores extends JFrame {
 				scrollPane_1.setBounds(424, 178, 191, 137);
 				contentPane.add(scrollPane_1);
 		
-				txtTeste = new JTextField();
-				scrollPane_1.setViewportView(txtTeste);
-				txtTeste.setColumns(10);
+				txtDs = new JTextField();
+				scrollPane_1.setViewportView(txtDs);
+				txtDs.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(424, 139, 191, 28);
 		contentPane.add(scrollPane);
 		
-		txtNMandDS = new JTextField();
-		scrollPane.setViewportView(txtNMandDS);
-		txtNMandDS.setColumns(10);
+		txtNome = new JTextField();
+		scrollPane.setViewportView(txtNome);
+		txtNome.setColumns(10);
 		btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		btnNewButton.setBounds(182, 344, 101, 23);
 		contentPane.add(btnNewButton);
@@ -117,7 +118,23 @@ public class Cuidadores extends JFrame {
 		btnVai = new JButton("");
 		btnVai.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Vai();
+				one++;
+				ResultSet rs = HotelDAO.findAll(one);
+
+				try {
+					if (rs.next()) {
+						String nome = rs.getString("NM_Cuidador");
+						String ds = rs.getString("DS_Cuidador");
+						
+						txtNome.setText(nome);
+						txtDs.setText(ds);
+						
+					} else {
+						one = -1;
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnVai.setContentAreaFilled(false);
@@ -132,8 +149,23 @@ public class Cuidadores extends JFrame {
 		btnVolta = new JButton("");
 		btnVolta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Voltar();
+				one--;
+				ResultSet rs = HotelDAO.findAll(one);
+
+				try {
+					if (rs.next()) {
+						String nome = rs.getString("NM_Cuidador");
+						String ds = rs.getString("DS_Cuidador");
+						
+						txtNome.setText(nome);
+						txtDs.setText(ds);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
 			}
+
 		});
 		btnVolta.setContentAreaFilled(false);
 		btnVolta.setOpaque(false);
@@ -217,13 +249,13 @@ public class Cuidadores extends JFrame {
 			ResultSet rs = comando.executeQuery();
 			
 			if (rs.next() && rs != null){
-				txtNMandDS.setText(rs.getString("NM_CUIDADOR"));
-				txtTeste.setText(rs.getString("DS_CUIDADOR"));
+				txtNome.setText(rs.getString("NM_CUIDADOR"));
+				txtDs.setText(rs.getString("DS_CUIDADOR"));
 				System.out.println(q + rs);
 				
 			}else{
-				txtNMandDS.getText();
-				txtTeste.getText();
+				txtNome.getText();
+				txtDs.getText();
 				System.out.println(q + rs);
 			}			
 			
@@ -253,13 +285,13 @@ public class Cuidadores extends JFrame {
 			ResultSet rs = comando.executeQuery();
 			
 			if (rs.next() && rs != null){
-				txtNMandDS.setText(rs.getString("NM_CUIDADOR"));
-				txtTeste.setText(rs.getString("DS_CUIDADOR"));
+				txtNome.setText(rs.getString("NM_CUIDADOR"));
+				txtDs.setText(rs.getString("DS_CUIDADOR"));
 				System.out.println(q + rs);
 
 			}else{
-				txtNMandDS.getText();
-				txtTeste.getText();
+				txtNome.getText();
+				txtDs.getText();
 				System.out.println(q + rs);
 
 			}			

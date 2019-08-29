@@ -11,9 +11,11 @@ import conexao.Conexao;
 
 public class HotelDAO {
 	
-	public static ResultSet findAll() {
-		String q = "SELECT NM_CUIDADOR, DS_CUIDADOR, NS_CUIDADOR FROM cuidadores";
+	public static ResultSet findAll(int one) {
+		Conexao c = new Conexao();
+		String q = "SELECT NM_CUIDADOR, DS_CUIDADOR, NS_CUIDADOR FROM cuidadores where CD_Cuidador > " + one + " order by CD_Cuidador";
 		try {
+			System.out.println(q);
 			PreparedStatement ps = Conexao.conn.prepareStatement(q);
 			return ps.executeQuery();
 		} catch (SQLException e) {
