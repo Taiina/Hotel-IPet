@@ -4,9 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.JOptionPane;
-
-import Beans.HotelBeans;
 import conexao.Conexao;
 
 public class HotelDAO {
@@ -35,6 +32,7 @@ public class HotelDAO {
 				ps.setString(4, cuidador);
 				System.out.println("Inserção concluida.");
 				System.out.println(q);
+				ps.executeUpdate();
 			} catch (SQLException e) {
 				System.err.println("Some error happen in inserting 'Cliente'");
 				e.printStackTrace();

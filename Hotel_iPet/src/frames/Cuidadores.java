@@ -31,7 +31,7 @@ public class Cuidadores extends JFrame {
 	private JTextField txtDs;
 	private JButton btnVai;
 	private JButton btnVolta;
-	private JTextField txtDigiteSeuNome;
+	private JTextField txtNomeCliente;
 	private MaskFormatter mascaras;
 	private JFormattedTextField data;
 	private JFormattedTextField data2;
@@ -72,13 +72,13 @@ public class Cuidadores extends JFrame {
 			}
 		});
 
-		txtDigiteSeuNome = new JTextField();
-		txtDigiteSeuNome.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-		txtDigiteSeuNome.setText("Digite seu nome...");
-		txtDigiteSeuNome.addFocusListener(new FocusAdapter() {
+		txtNomeCliente = new JTextField();
+		txtNomeCliente.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
+		txtNomeCliente.setText("Digite seu nome...");
+		txtNomeCliente.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				txtDigiteSeuNome.setText(" ");
+				txtNomeCliente.setText("");
 			}
 		});
 
@@ -89,10 +89,14 @@ public class Cuidadores extends JFrame {
 			e1.printStackTrace();
 		}
 
-		JButton btnNewButton = new JButton("Finalizar");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnFinalizar = new JButton("Finalizar");
+		btnFinalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DAO.HotelDAO.Agendar(txtNome.getText(), data.getText(), data2.getText(), txtNome.getText());
+				String nome = txtNomeCliente.getText();
+				String dataComeco = data.getText();
+				String dataFinal = data2.getText();
+				String cuidador = txtNome.getText();
+				DAO.HotelDAO.Agendar(nome, dataComeco, dataFinal, cuidador);
 				
 			}
 		});
@@ -112,9 +116,9 @@ public class Cuidadores extends JFrame {
 		txtNome = new JTextField();
 		scrollPane.setViewportView(txtNome);
 		txtNome.setColumns(10);
-		btnNewButton.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		btnNewButton.setBounds(182, 344, 101, 23);
-		contentPane.add(btnNewButton);
+		btnFinalizar.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+		btnFinalizar.setBounds(182, 344, 101, 23);
+		contentPane.add(btnFinalizar);
 
 		btnVai = new JButton("");
 		btnVai.addActionListener(new ActionListener() {
@@ -196,9 +200,9 @@ public class Cuidadores extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(Cuidadores.class.getResource("/imagens/Sem t\u00EDtulo.png")));
 		lblNewLabel.setBounds(399, 108, 2, 268);
 		contentPane.add(lblNewLabel);
-		txtDigiteSeuNome.setBounds(166, 130, 210, 23);
-		contentPane.add(txtDigiteSeuNome);
-		txtDigiteSeuNome.setColumns(10);
+		txtNomeCliente.setBounds(166, 130, 210, 23);
+		contentPane.add(txtNomeCliente);
+		txtNomeCliente.setColumns(10);
 
 		JLabel lblAt = new JLabel("at\u00E9");
 		lblAt.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
