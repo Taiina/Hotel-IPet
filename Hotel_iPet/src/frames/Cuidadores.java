@@ -92,22 +92,23 @@ public class Cuidadores extends JFrame {
 		JButton btnNewButton = new JButton("Finalizar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Agendar();
+				DAO.HotelDAO.Agendar(txtNome.getText(), data.getText(), data2.getText(), txtNome.getText());
+				
 			}
 		});
-				
-				JScrollPane scrollPane_1 = new JScrollPane();
-				scrollPane_1.setBounds(424, 178, 191, 137);
-				contentPane.add(scrollPane_1);
-		
-				txtDs = new JTextField();
-				scrollPane_1.setViewportView(txtDs);
-				txtDs.setColumns(10);
-		
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(424, 178, 191, 137);
+		contentPane.add(scrollPane_1);
+
+		txtDs = new JTextField();
+		scrollPane_1.setViewportView(txtDs);
+		txtDs.setColumns(10);
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(424, 139, 191, 28);
 		contentPane.add(scrollPane);
-		
+
 		txtNome = new JTextField();
 		scrollPane.setViewportView(txtNome);
 		txtNome.setColumns(10);
@@ -125,10 +126,10 @@ public class Cuidadores extends JFrame {
 					if (rs.next()) {
 						String nome = rs.getString("NM_Cuidador");
 						String ds = rs.getString("DS_Cuidador");
-						
+
 						txtNome.setText(nome);
 						txtDs.setText(ds);
-						
+
 					} else {
 						one = -1;
 					}
@@ -156,7 +157,7 @@ public class Cuidadores extends JFrame {
 					if (rs.next()) {
 						String nome = rs.getString("NM_Cuidador");
 						String ds = rs.getString("DS_Cuidador");
-						
+
 						txtNome.setText(nome);
 						txtDs.setText(ds);
 					}
@@ -181,11 +182,11 @@ public class Cuidadores extends JFrame {
 		lblCuidadores.setBounds(461, 108, 117, 20);
 		contentPane.add(lblCuidadores);
 
-		
 		data2 = new JFormattedTextField(mascaras);
 		data2.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
 		data2.setBounds(311, 166, 54, 19);
 		contentPane.add(data2);
+		
 		data = new JFormattedTextField(mascaras);
 		data.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
 		data.setBounds(209, 166, 54, 19);
@@ -195,11 +196,6 @@ public class Cuidadores extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(Cuidadores.class.getResource("/imagens/Sem t\u00EDtulo.png")));
 		lblNewLabel.setBounds(399, 108, 2, 268);
 		contentPane.add(lblNewLabel);
-
-		JLabel lblCdigoDoCuidador = new JLabel("Cuidador:");
-		lblCdigoDoCuidador.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
-		lblCdigoDoCuidador.setBounds(97, 196, 101, 20);
-		contentPane.add(lblCdigoDoCuidador);
 		txtDigiteSeuNome.setBounds(166, 130, 210, 23);
 		contentPane.add(txtDigiteSeuNome);
 		txtDigiteSeuNome.setColumns(10);
@@ -237,106 +233,4 @@ public class Cuidadores extends JFrame {
 		contentPane.add(background);
 	}
 
-	protected void Vai() {
-
-		Conexao c = new Conexao();
-
-		try{
-			String q = "SELECT NM_CUIDADOR, DS_CUIDADOR FROM cuidadores "
-					+ " WHERE CD_CUIDADOR > 0 order by CD_CUIDADOR ASC ";
-
-			PreparedStatement comando = c.conn.prepareStatement(q);
-			ResultSet rs = comando.executeQuery();
-			
-			if (rs.next() && rs != null){
-				txtNome.setText(rs.getString("NM_CUIDADOR"));
-				txtDs.setText(rs.getString("DS_CUIDADOR"));
-				System.out.println(q + rs);
-				
-			}else{
-				txtNome.getText();
-				txtDs.getText();
-				System.out.println(q + rs);
-			}			
-			
-		} catch (Exception ex) {
-			System.err.println("FALHA NA SELECT");
-			ex.printStackTrace();
-		} finally {
-			if (c.conn != null) {
-				try {
-					c.conn.close();
-				} catch (Exception ex) {
-					System.err.println("Error in connection termination!");
-				}
-			}
-
-		}
-	}
-
-	protected void Voltar() {
-			
-		Conexao c = new Conexao();
-		
-		try{
-			String q = "SELECT NM_CUIDADOR, DS_CUIDADOR FROM cuidadores "
-					+ " WHERE CD_CUIDADOR < 6 order by CD_CUIDADOR DESC "; 
-			PreparedStatement comando = c.conn.prepareStatement(q);
-			ResultSet rs = comando.executeQuery();
-			
-			if (rs.next() && rs != null){
-				txtNome.setText(rs.getString("NM_CUIDADOR"));
-				txtDs.setText(rs.getString("DS_CUIDADOR"));
-				System.out.println(q + rs);
-
-			}else{
-				txtNome.getText();
-				txtDs.getText();
-				System.out.println(q + rs);
-
-			}			
-			
-		} catch (Exception ex) {
-			System.err.println("FALHA NA SELECT");
-			ex.printStackTrace();
-		} finally {
-			if (c.conn != null) {
-				try {
-					c.conn.close();
-				} catch (Exception ex) {
-					System.err.println("Error in connection termination!");
-				}
-			}
-
-		}
-	}
-
-
-	protected void Agendar() {
-
-		Conexao c = new Conexao();
-
-		try {
-			String q;
-			q = "INSERT INTO agendamento_cuidador (NM_CLIENTE, DT_EINS_AG_CUIDADOR, DT_ZWEI_AG_CUIDADOR) "
-					+ "VALUES ('" + txtDigiteSeuNome.getText() + "', '" + data.getText() + "', '" + data2.getText()
-					+ "')";
-
-			PreparedStatement comando = c.conn.prepareStatement(q);
-			ResultSet rs = comando.executeQuery();
-			
-		} catch (Exception ex) {
-			System.err.println("FALHA NA INSERT");
-			ex.printStackTrace();
-		} finally {
-			if (c.conn != null) {
-				try {
-					c.conn.close();
-				} catch (Exception ex) {
-					System.err.println("Error in connection termination!");
-				}
-			}
-
-		}
-	}
 }

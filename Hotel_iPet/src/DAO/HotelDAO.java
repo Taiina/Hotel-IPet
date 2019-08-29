@@ -24,4 +24,20 @@ public class HotelDAO {
 			return null;
 		}
 	}
+		public static void Agendar(String cliente, String data1, String data2, String cuidador){
+		Conexao c = new Conexao();
+		String q = "INSERT INTO agendamento_cuidador (NM_CLIENTE, DT_EINS_AG_CUIDADOR, DT_ZWEI_AG_CUIDADOR, NM_CUIDADOR) VALUES (?, ?, ?, ?)" ;
+			try {
+				PreparedStatement ps = Conexao.conn.prepareStatement(q);
+				ps.setString(1, cliente);
+				ps.setString(2, data1);
+				ps.setString(3, data2);
+				ps.setString(4, cuidador);
+				System.out.println("Inserção concluida.");
+				System.out.println(q);
+			} catch (SQLException e) {
+				System.err.println("Some error happen in inserting 'Cliente'");
+				e.printStackTrace();
+			}
+		}
 }
