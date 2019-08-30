@@ -21,15 +21,17 @@ public class HotelDAO {
 			return null;
 		}
 	}
-		public static void Agendar(String cliente, String data1, String data2, String cuidador){
+		public static void Agendar(String cliente, String data1, String data2, String cuidador, String obs, String tipo){
 		Conexao c = new Conexao();
-		String q = "INSERT INTO agendamento_cuidador (NM_CLIENTE, DT_EINS_AG_CUIDADOR, DT_ZWEI_AG_CUIDADOR, NM_CUIDADOR) VALUES (?, ?, ?, ?)" ;
+		String q = "INSERT INTO agendamento_cuidador (NM_CLIENTE, DT_EINS_AG_CUIDADOR, DT_ZWEI_AG_CUIDADOR, NM_CUIDADOR, OBS_Agendamento, TP_Agendamento) VALUES (?, ?, ?, ?, ?, ?)" ;
 			try {
 				PreparedStatement ps = Conexao.conn.prepareStatement(q);
 				ps.setString(1, cliente);
 				ps.setString(2, data1);
 				ps.setString(3, data2);
 				ps.setString(4, cuidador);
+				ps.setString(5, obs);
+				ps.setString(6, tipo);
 				System.out.println("Inserção concluida.");
 				System.out.println(q);
 				ps.executeUpdate();

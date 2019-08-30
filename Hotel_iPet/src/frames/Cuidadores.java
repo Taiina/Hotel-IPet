@@ -24,11 +24,15 @@ import javax.swing.text.MaskFormatter;
 
 import DAO.HotelDAO;
 import conexao.Conexao;
+import javax.swing.SwingConstants;
+import javax.swing.DropMode;
+import javax.swing.JTextPane;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
 public class Cuidadores extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtDs;
 	private JButton btnVai;
 	private JButton btnVolta;
 	private JTextField txtNomeCliente;
@@ -36,7 +40,13 @@ public class Cuidadores extends JFrame {
 	private JFormattedTextField data;
 	private JFormattedTextField data2;
 	private JTextField txtNome;
+	JTextPane txtDs = new JTextPane();
 	int one = -1;
+	private JTextField txtObs;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	JRadioButton gato = new JRadioButton("Gato");
+	JRadioButton cachorro = new JRadioButton("Cachorro");
+	private String tipo;
 
 	/**
 	 * Launch the application.
@@ -88,6 +98,26 @@ public class Cuidadores extends JFrame {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
+		
+		JRadioButton gato = new JRadioButton("Gato");
+		buttonGroup.add(gato);
+		gato.setContentAreaFilled(false);
+		gato.setBorderPainted(false);
+		gato.setOpaque(false);
+		gato.setFocusPainted(false);
+		gato.setFont(new Font("Lucida Bright", Font.BOLD, 13));
+		gato.setBounds(168, 220, 63, 23);
+		contentPane.add(gato);
+		
+		JRadioButton cachorro = new JRadioButton("Cachorro");
+		buttonGroup.add(cachorro);
+		cachorro.setContentAreaFilled(false);
+		cachorro.setBorderPainted(false);
+		cachorro.setOpaque(false);
+		cachorro.setFocusPainted(false);
+		cachorro.setFont(new Font("Lucida Bright", Font.BOLD, 13));
+		cachorro.setBounds(243, 220, 89, 23);
+		contentPane.add(cachorro);
 
 		JButton btnFinalizar = new JButton("Finalizar");
 		btnFinalizar.addActionListener(new ActionListener() {
@@ -96,24 +126,34 @@ public class Cuidadores extends JFrame {
 				String dataComeco = data.getText();
 				String dataFinal = data2.getText();
 				String cuidador = txtNome.getText();
-				DAO.HotelDAO.Agendar(nome, dataComeco, dataFinal, cuidador);
+				String obs = txtObs.getText();
+				
+				if (cachorro.isSelected()){
+					tipo = "Cachorro";
+					System.out.println("dog");
+				} else if (gato.isSelected()) {
+					tipo = "Gato";
+					System.out.println("cat");
+				}
+				
+				
+				DAO.HotelDAO.Agendar(nome, dataComeco, dataFinal, cuidador, obs, tipo);
 				
 			}
 		});
-
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(424, 178, 191, 137);
-		contentPane.add(scrollPane_1);
-
-		txtDs = new JTextField();
-		scrollPane_1.setViewportView(txtDs);
-		txtDs.setColumns(10);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(424, 139, 191, 28);
 		contentPane.add(scrollPane);
 
+		JTextPane txtDs = new JTextPane();
+		txtDs.setEditable(false);
+		txtDs.setContentType("");
+		txtDs.setBounds(424, 179, 191, 135);
+		contentPane.add(txtDs);
+		
 		txtNome = new JTextField();
+		txtNome.setEditable(false);
 		scrollPane.setViewportView(txtNome);
 		txtNome.setColumns(10);
 		btnFinalizar.setFont(new Font("Times New Roman", Font.PLAIN, 13));
@@ -188,12 +228,12 @@ public class Cuidadores extends JFrame {
 
 		data2 = new JFormattedTextField(mascaras);
 		data2.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-		data2.setBounds(311, 166, 54, 19);
+		data2.setBounds(312, 183, 54, 19);
 		contentPane.add(data2);
 		
 		data = new JFormattedTextField(mascaras);
 		data.setFont(new Font("Lucida Bright", Font.PLAIN, 16));
-		data.setBounds(209, 166, 54, 19);
+		data.setBounds(202, 183, 54, 19);
 		contentPane.add(data);
 
 		JLabel lblNewLabel = new JLabel("New label");
@@ -206,18 +246,23 @@ public class Cuidadores extends JFrame {
 
 		JLabel lblAt = new JLabel("at\u00E9");
 		lblAt.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
-		lblAt.setBounds(273, 165, 36, 20);
+		lblAt.setBounds(266, 182, 36, 20);
 		contentPane.add(lblAt);
 
-		JLabel lblData = new JLabel("Data:   De");
+		JLabel lblData = new JLabel("Data: ");
 		lblData.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
-		lblData.setBounds(97, 165, 100, 20);
+		lblData.setBounds(97, 182, 63, 20);
 		contentPane.add(lblData);
 
 		JLabel label = new JLabel("Nome:");
 		label.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
 		label.setBounds(97, 131, 73, 20);
 		contentPane.add(label);
+		
+		JLabel lblAlgumaObservao = new JLabel("Alguma observa\u00E7\u00E3o?");
+		lblAlgumaObservao.setFont(new Font("Lucida Bright", Font.PLAIN, 18));
+		lblAlgumaObservao.setBounds(150, 253, 205, 28);
+		contentPane.add(lblAlgumaObservao);
 		sair.setContentAreaFilled(false);
 		sair.setOpaque(false);
 		sair.setFocusPainted(false);
@@ -225,16 +270,32 @@ public class Cuidadores extends JFrame {
 		sair.setIcon(new ImageIcon(Cuidadores.class.getResource("/imagens/183189-128(1).png")));
 		sair.setBounds(10, 325, 63, 51);
 		contentPane.add(sair);
+		
+		
 
 		JLabel lblCuidador = new JLabel("Hotel IPet");
 		lblCuidador.setFont(new Font("Bauhaus 93", Font.PLAIN, 50));
 		lblCuidador.setBounds(231, 37, 247, 65);
 		contentPane.add(lblCuidador);
+		
+		JLabel lblTipo = new JLabel("Tipo:");
+		lblTipo.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
+		lblTipo.setBounds(97, 224, 63, 23);
+		contentPane.add(lblTipo);
+		
+		JLabel lblDe = new JLabel("De");
+		lblDe.setFont(new Font("Lucida Bright", Font.PLAIN, 20));
+		lblDe.setBounds(165, 177, 46, 31);
+		contentPane.add(lblDe);
+		
+		txtObs = new JTextField();
+		txtObs.setBounds(139, 280, 205, 20);
+		contentPane.add(txtObs);
+		txtObs.setColumns(10);
 
 		JLabel background = new JLabel("");
 		background.setIcon(new ImageIcon(Cuidadores.class.getResource("/imagens/Background.jpg")));
 		background.setBounds(0, 0, 644, 401);
 		contentPane.add(background);
 	}
-
 }
